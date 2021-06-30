@@ -23,7 +23,7 @@ class Sim():
 		if(self.t - DELAY >= 0):
 			self.state[0] = self.hist_integral[self.t - DELAY]
 			self.state[1] = self.hist_control[self.t - DELAY]
-			self.state[2] = action
+			self.state[2] = self.t / T_MAX
 
 		dev = (self.t / 5000) - self.hist_integral[self.t]
 
