@@ -10,6 +10,9 @@ class Sim():
 		self.reset()
 
 	def step(self,action):
+		action = action / DELAY
+		#print(action)
+
 		self.hist_control[self.t] = action
 
 		if(self.t > 0):
@@ -29,9 +32,9 @@ class Sim():
 		self.t = self.t + 1
 
 		if(self.t >= T_MAX):
-			return self.state, -np.log(self.error + 0.001) , True
+			return self.state, -np.log(self.error + 0.00001) , True
 		else:
-			return self.state, -np.log(self.error + 0.001) , False
+			return self.state, -np.log(self.error + 0.00001) , False
 
 	def reset(self):
 		self.t = 0

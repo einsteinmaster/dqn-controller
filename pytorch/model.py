@@ -26,6 +26,6 @@ class QNetwork(nn.Module):
         """Build a network that maps state -> action values."""
         x = self.bn(state)
         x = F.relu(self.fc1(x))
-        #print("state = {0} fc1 = {1} relu = {2}".format(state,self.fc1(state),x))
+        # print("state = {0} fc1 = {1} relu = {2}".format(state,self.fc1(state),x))
         x = F.relu(self.fc2(x))
-        return F.relu(self.fc3(x))
+        return torch.sigmoid(self.fc3(x))
