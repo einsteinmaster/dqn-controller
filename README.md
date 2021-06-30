@@ -39,3 +39,11 @@ ssh with
 ```
 ssh root@<adress> -p <portNum>
 ```
+
+Here to download from git
+
+```
+! wget https://raw.githubusercontent.com/einsteinmaster/dqn-controller/master/pytorch/dqn_agent.py
+! wget https://raw.githubusercontent.com/einsteinmaster/dqn-controller/master/pytorch/model.py
+! wget https://raw.githubusercontent.com/einsteinmaster/dqn-controller/master/pytorch/sim.py
+```
