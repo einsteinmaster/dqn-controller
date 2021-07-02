@@ -1,16 +1,24 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-T_MAX = 5000
+T_MAX = 50
 
 DELAY = T_MAX // 5
 
+ALPHA = 4.0 / T_MAX
+
 class Sim():
 	def __init__(self) -> None:
+		self.T_MAX = T_MAX
+		self.DELAY = DELAY
 		self.reset()
 
 	def step(self,action):
 		action = action / DELAY
+		if self.t > 0:
+			action = ALPHA * action + (1-ALPHA) * self.hist_control[self.t-1]
+		else:
+			action = 0
 		#print(action)
 
 		self.hist_control[self.t] = action
@@ -21,26 +29,28 @@ class Sim():
 			self.hist_integral[self.t] = 0
 
 		if(self.t - DELAY >= 0):
-			self.state[0] = self.hist_integral[self.t - DELAY]
-			self.state[1] = self.hist_control[self.t - DELAY]
-			self.state[2] = self.t / T_MAX
-
-		dev = (self.t / 5000) - self.hist_integral[self.t]
+			self.state[0] = self.t / T_MAX
+			self.state[1] = self.hist_integral[self.t - DELAY]
+			#self.state[2] = self.hist_control[self.t - DELAY]
+			
+		dev = (self.t / T_MAX) - self.hist_integral[self.t]
 
 		self.error += dev * dev
 
 		self.t = self.t + 1
 
 		if(self.t >= T_MAX):
-			return self.state, -np.log(self.error + 0.00001) , True
+			#ret_err = -np.log(self.error + 0.00000000001) + 10
+			ret_err = -self.error
+			return self.state, ret_err , True
 		else:
-			return self.state, -np.log(self.error + 0.00001) , False
+			return self.state, 0 , False
 
 	def reset(self):
 		self.t = 0
 		self.hist_control = np.zeros(T_MAX)
 		self.hist_integral = np.zeros(T_MAX)
-		self.state = np.zeros(3)
+		self.state = np.zeros(2)
 		self.error = 0
 		return self.state
 
@@ -48,7 +58,11 @@ class Sim():
 		pass
 
 	def close(self):
-		plt.plot([t/5000 for t in range(5000)],label="set")
-		plt.plot(self.hist_integral,label="is")
+		fig, axs = plt.subplots(2)
+		axs[0].plot([t/T_MAX for t in range(T_MAX)],label="set")
+		axs[0].plot(self.hist_integral,label="is")
+		axs[1].plot(self.hist_control,label="control")
+		axs[0].legend()
+		axs[1].legend()
 		plt.show()
 		pass

@@ -5,7 +5,7 @@ import torch.nn.functional as F
 class QNetwork(nn.Module):
     """Actor (Policy) Model."""
 
-    def __init__(self, state_size, action_size, seed, fc1_units=64, fc2_units=64):
+    def __init__(self, state_size, action_size, seed, fc1_units=10, fc2_units=10):
         """Initialize parameters and build model.
         Params
         ======
@@ -24,8 +24,9 @@ class QNetwork(nn.Module):
 
     def forward(self, state):
         """Build a network that maps state -> action values."""
-        x = self.bn(state)
+        x = state
+        #x = self.bn(x)
         x = F.relu(self.fc1(x))
         # print("state = {0} fc1 = {1} relu = {2}".format(state,self.fc1(state),x))
         x = F.relu(self.fc2(x))
-        return torch.sigmoid(self.fc3(x))
+        return self.fc3(x)
