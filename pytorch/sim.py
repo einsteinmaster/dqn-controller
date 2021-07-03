@@ -5,7 +5,7 @@ T_MAX = 50
 
 DELAY = T_MAX // 5
 
-ALPHA = 15.0 / T_MAX
+ALPHA = 10.0 / T_MAX
 
 class Sim():
 	def __init__(self) -> None:
@@ -14,7 +14,7 @@ class Sim():
 		self.reset()
 
 	def step(self,action):
-		action = action / DELAY
+		action = 2.0*(action / T_MAX)
 		if self.t > 0:
 			action = ALPHA * action + (1-ALPHA) * self.hist_control[self.t-1]
 		else:
@@ -42,6 +42,9 @@ class Sim():
 		if(self.t >= T_MAX):
 			#ret_err = -np.log(self.error + 0.00000000001) + 10
 			ret_err = -self.error
+			return self.state, ret_err , True
+		elif(self.error > 0.01*T_MAX):
+			ret_err = -self.error -(T_MAX - self.t)
 			return self.state, ret_err , True
 		else:
 			return self.state, 0 , False
