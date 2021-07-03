@@ -5,7 +5,7 @@ T_MAX = 50
 
 DELAY = T_MAX // 5
 
-ALPHA = 4.0 / T_MAX
+ALPHA = 15.0 / T_MAX
 
 class Sim():
 	def __init__(self) -> None:
